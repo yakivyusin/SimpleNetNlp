@@ -180,6 +180,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Document.cs" />
+    <Compile Include="Exceptions\Converters\Concrete\DefaultExceptionConverter.cs" />
+    <Compile Include="Exceptions\Converters\Concrete\MissingPosTaggerConverter.cs" />
+    <Compile Include="Exceptions\Converters\ExceptionConverter.cs" />
+    <Compile Include="Exceptions\Converters\IExceptionConverter.cs" />
+    <Compile Include="Exceptions\MissingModelException.cs" />
+    <Compile Include="Exceptions\UnhandledLibraryException.cs" />
     <Compile Include="Extensions\JavaListExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Sentence.cs" />
