@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using SimpleNetNlp.Extensions;
 
 namespace SimpleNetNlp
@@ -24,7 +23,6 @@ namespace SimpleNetNlp
         /// <summary>
         /// Get the sentences in this document, as a list.
         /// </summary>
-        /// <returns>A list of Sentence objects representing the sentences in the document.</returns>
         public List<Sentence> Sentences
         {
             get
@@ -33,12 +31,15 @@ namespace SimpleNetNlp
                 {
                     sentences = nlpDoc
                                     .sentences()
-                                    .ToList<edu.stanford.nlp.simple.Sentence>()
-                                    .Select(x => new Sentence(x))
-                                    .ToList();
+                                    .ToList<edu.stanford.nlp.simple.Sentence, Sentence>(x => new Sentence(x));
                 }
                 return sentences;
             }
+        }
+
+        public override string ToString()
+        {
+            return nlpDoc.toString();
         }
     }
 }

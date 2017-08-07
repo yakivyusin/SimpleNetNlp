@@ -22,12 +22,37 @@ namespace SimpleNetNlp.Extensions
             return Enumerate<T>(list).ToList();
         }
 
+        /// <summary>
+        /// Convert java.util.List that contains elements of type <typeparamref name="TSource"/>
+        /// to System.Collections.Generic.List of arbitary type <typeparamref name="TTarget"/> based on <paramref name="convertingFunction"/>
+        /// </summary>
+        /// <typeparam name="TSource">The source type of the Java list elements.</typeparam>
+        /// <typeparam name="TTarget">The target type.</typeparam>
+        /// <param name="list">List to convertion.</param>
+        /// <param name="convertingFunction">Function for converting <typeparamref name="TSource"/> element to <typeparamref name="TTarget"/></param>
+        /// <returns>A converted list.</returns>
+        internal static List<TTarget> ToList<TSource, TTarget>(this java.util.List list, Func<TSource, TTarget> convertingFunction)
+        {
+            if (list == null) throw new NullReferenceException();
+
+            return Enumerate(list, convertingFunction).ToList();
+        }
+
         private static IEnumerable<T> Enumerate<T>(java.util.List list)
         {
             var iterator = list.iterator();
             while (iterator.hasNext())
             {
                 yield return (T)(iterator.next());
+            }
+        }
+
+        private static IEnumerable<TTarget> Enumerate<TSource, TTarget>(java.util.List list, Func<TSource, TTarget> convertingFunction)
+        {
+            var iterator = list.iterator();
+            while (iterator.hasNext())
+            {
+                yield return convertingFunction((TSource)iterator.next());
             }
         }
     }

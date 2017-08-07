@@ -31,11 +31,38 @@ namespace SimpleNetNlp
         }
 
         /// <summary>
-        /// The lemmas of the sentence.
+        /// The begin position of each token in the sentence.
+        /// </summary>
+        public IReadOnlyCollection<int> CharacterOffsetBegin
+        {
+            get
+            {
+                return nlpSentence
+                        .characterOffsetBegin()
+                        .ToList<java.lang.Integer, int>(x => int.Parse(x.toString()))
+                        .AsReadOnly();
+            }
+        }
+
+        /// <summary>
+        /// The end position of each token in the sentence.
+        /// </summary>
+        public IReadOnlyCollection<int> CharacterOffsetEnd
+        {
+            get
+            {
+                return nlpSentence
+                        .characterOffsetEnd()
+                        .ToList<java.lang.Integer, int>(x => int.Parse(x.toString()))
+                        .AsReadOnly();
+            }
+        }
+
+        /// <summary>
+        /// The lemmas of the sentence, one for each token in the sentence.
         /// </summary>
         /// <exception cref="Exceptions.MissingModelException">Thrown when library cannot find model files: PosTagger</exception>
         /// <exception cref="Exceptions.UnhandledLibraryException">Thrown when an unexpected exception is caused by CoreNLP library.</exception>
-        /// <returns>A list of lemmatized words, one for each token in the sentence.</returns>
         public IReadOnlyCollection<string> Lemmas
         {
             get
@@ -55,11 +82,10 @@ namespace SimpleNetNlp
         }
 
         /// <summary>
-        /// The named entity tags of the sentence.
+        /// The named entity tags of the sentence, one for each token in the sentence.
         /// </summary>
         /// <exception cref="Exceptions.MissingModelException">Thrown when library cannot find model files: PosTagger, Ner</exception>
         /// <exception cref="Exceptions.UnhandledLibraryException">Thrown when an unexpected exception is caused by CoreNLP library.</exception>
-        /// <returns>A list of named entity tags, one for each token in the sentence.</returns>
         public IReadOnlyCollection<string> NerTags
         {
             get
@@ -78,6 +104,39 @@ namespace SimpleNetNlp
                     throw exceptionConverter.WrapException(e);
                 }
             }
+        }
+
+        /// <summary>
+        /// The words of the sentence.
+        /// </summary>
+        public IReadOnlyCollection<string> Words
+        {
+            get
+            {
+                return nlpSentence
+                        .words()
+                        .ToList<string>()
+                        .AsReadOnly();
+            }
+        }
+
+        /// <summary>
+        /// The original (unprocessed) words of the sentence.
+        /// </summary>
+        public IReadOnlyCollection<string> OriginalWords
+        {
+            get
+            {
+                return nlpSentence
+                        .originalTexts()
+                        .ToList<string>()
+                        .AsReadOnly();
+            }
+        }
+
+        public override string ToString()
+        {
+            return nlpSentence.toString();
         }
     }
 }
