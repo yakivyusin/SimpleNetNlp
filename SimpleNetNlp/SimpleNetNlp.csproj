@@ -181,6 +181,7 @@
   <ItemGroup>
     <Compile Include="Document.cs" />
     <Compile Include="Exceptions\Converters\Concrete\DefaultExceptionConverter.cs" />
+    <Compile Include="Exceptions\Converters\Concrete\MissingNerConverter.cs" />
     <Compile Include="Exceptions\Converters\Concrete\MissingPosTaggerConverter.cs" />
     <Compile Include="Exceptions\Converters\ExceptionConverter.cs" />
     <Compile Include="Exceptions\Converters\IExceptionConverter.cs" />

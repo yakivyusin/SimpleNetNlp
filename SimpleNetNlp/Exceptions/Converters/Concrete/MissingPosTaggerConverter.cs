@@ -4,7 +4,7 @@ namespace SimpleNetNlp.Exceptions.Converters.Concrete
 {
     internal class MissingPosTaggerConverter : IExceptionConverter
     {
-        private string posModelPath =
+        private static readonly string posModelPath =
             "Unable to open \"edu/stanford/nlp/models/pos-tagger/english-left3words/english-left3words-distsim.tagger\" as class path, filename or URL";
 
         public bool CanConvert(Exception exception)

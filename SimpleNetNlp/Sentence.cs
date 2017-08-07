@@ -53,5 +53,31 @@ namespace SimpleNetNlp
                 }    
             }
         }
+
+        /// <summary>
+        /// The named entity tags of the sentence.
+        /// </summary>
+        /// <exception cref="Exceptions.MissingModelException">Thrown when library cannot find model files: PosTagger, Ner</exception>
+        /// <exception cref="Exceptions.UnhandledLibraryException">Thrown when an unexpected exception is caused by CoreNLP library.</exception>
+        /// <returns>A list of named entity tags, one for each token in the sentence.</returns>
+        public IReadOnlyCollection<string> NerTags
+        {
+            get
+            {
+                var props = new java.util.Properties();
+                props.setProperty("ner.useSUTime", "0");
+                try
+                {
+                    return nlpSentence
+                            .nerTags(props)
+                            .ToList<string>()
+                            .AsReadOnly();
+                }
+                catch (Exception e)
+                {
+                    throw exceptionConverter.WrapException(e);
+                }
+            }
+        }
     }
 }

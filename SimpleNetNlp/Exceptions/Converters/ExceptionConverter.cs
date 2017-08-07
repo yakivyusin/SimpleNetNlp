@@ -10,6 +10,7 @@ namespace SimpleNetNlp.Exceptions.Converters
         private List<IExceptionConverter> concreteConverters = new List<IExceptionConverter>()
         {
             new MissingPosTaggerConverter(),
+            new MissingNerConverter(),
             new DefaultExceptionConverter()
         };
 
