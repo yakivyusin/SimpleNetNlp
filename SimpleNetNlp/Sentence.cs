@@ -143,6 +143,29 @@ namespace SimpleNetNlp
         }
 
         /// <summary>
+        /// The part of speech tags of the sentence, one for each token in the sentence.
+        /// </summary>
+        /// <exception cref="Exceptions.MissingModelException">Thrown when library cannot find model files: PosTagger</exception>
+        /// <exception cref="Exceptions.UnhandledLibraryException">Thrown when an unexpected exception is caused by CoreNLP library.</exception>
+        public IReadOnlyCollection<string> PosTags
+        {
+            get
+            {
+                try
+                {
+                    return nlpSentence
+                            .posTags()
+                            .ToList<string>()
+                            .AsReadOnly();
+                }
+                catch (Exception e)
+                {
+                    throw exceptionConverter.WrapException(e);
+                }
+            }
+        }
+
+        /// <summary>
         /// The words of the sentence.
         /// </summary>
         public IReadOnlyCollection<string> Words
