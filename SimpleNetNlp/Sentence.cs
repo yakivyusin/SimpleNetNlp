@@ -59,6 +59,42 @@ namespace SimpleNetNlp
         }
 
         /// <summary>
+        /// The index of the sentence within the document.
+        /// </summary>
+        public int SentenceIndex
+        {
+            get
+            {
+                return nlpSentence
+                        .sentenceIndex();
+            }
+        }
+
+        /// <summary>
+        /// The begin position (in tokens) of the sentence within the document.
+        /// </summary>
+        public int SentenceTokenOffsetBegin
+        {
+            get
+            {
+                return nlpSentence
+                        .sentenceTokenOffsetBegin();
+            }
+        }
+
+        /// <summary>
+        /// The end position (in tokens) of the sentence within the document.
+        /// </summary>
+        public int SentenceTokenOffsetEnd
+        {
+            get
+            {
+                return nlpSentence
+                        .sentenceTokenOffsetEnd();
+            }
+        }
+
+        /// <summary>
         /// The lemmas of the sentence, one for each token in the sentence.
         /// </summary>
         /// <exception cref="Exceptions.MissingModelException">Thrown when library cannot find model files: PosTagger</exception>
