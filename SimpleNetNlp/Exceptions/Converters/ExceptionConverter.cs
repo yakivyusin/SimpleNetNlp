@@ -11,6 +11,8 @@ namespace SimpleNetNlp.Exceptions.Converters
         {
             new MissingPosTaggerConverter(),
             new MissingNerConverter(),
+            new MissingParserConverter(),
+            new MissingNaturalliConverter(),
             new DefaultExceptionConverter()
         };
 

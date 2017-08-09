@@ -166,6 +166,30 @@ namespace SimpleNetNlp
         }
 
         /// <summary>
+        /// Get the OpenIE triples associated with this sentence. 
+        /// <para>Returns a collection of RelationTriple objects representing the OpenIE triples in the sentence.</para>
+        /// </summary>
+        /// <exception cref="Exceptions.MissingModelException">Thrown when library cannot find model files: PosTagger, Parser, Naturalli</exception>
+        /// <exception cref="Exceptions.UnhandledLibraryException">Thrown when an unexpected exception is caused by CoreNLP library.</exception>
+        public IReadOnlyCollection<RelationTriple> OpenIe
+        {
+            get
+            {
+                try
+                {
+                    return nlpSentence
+                            .openie()
+                            .ToList<edu.stanford.nlp.util.Quadruple, RelationTriple>(x => new RelationTriple(x))
+                            .AsReadOnly();
+                }
+                catch (Exception e)
+                {
+                    throw exceptionConverter.WrapException(e);
+                }
+            }
+        }
+
+        /// <summary>
         /// The words of the sentence.
         /// </summary>
         public IReadOnlyCollection<string> Words

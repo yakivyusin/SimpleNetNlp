@@ -35,7 +35,7 @@ namespace SimpleNetNlp.Extensions
         {
             if (list == null) throw new NullReferenceException();
 
-            return Enumerate(list, convertingFunction).ToList();
+            return (list as java.util.Collection).ToList(convertingFunction);
         }
 
         private static IEnumerable<T> Enumerate<T>(java.util.List list)
@@ -44,15 +44,6 @@ namespace SimpleNetNlp.Extensions
             while (iterator.hasNext())
             {
                 yield return (T)(iterator.next());
-            }
-        }
-
-        private static IEnumerable<TTarget> Enumerate<TSource, TTarget>(java.util.List list, Func<TSource, TTarget> convertingFunction)
-        {
-            var iterator = list.iterator();
-            while (iterator.hasNext())
-            {
-                yield return convertingFunction((TSource)iterator.next());
             }
         }
     }

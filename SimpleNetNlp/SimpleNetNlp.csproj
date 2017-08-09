@@ -181,14 +181,18 @@
   <ItemGroup>
     <Compile Include="Document.cs" />
     <Compile Include="Exceptions\Converters\Concrete\DefaultExceptionConverter.cs" />
+    <Compile Include="Exceptions\Converters\Concrete\MissingNaturalliConverter.cs" />
+    <Compile Include="Exceptions\Converters\Concrete\MissingParserConverter.cs" />
     <Compile Include="Exceptions\Converters\Concrete\MissingNerConverter.cs" />
     <Compile Include="Exceptions\Converters\Concrete\MissingPosTaggerConverter.cs" />
     <Compile Include="Exceptions\Converters\ExceptionConverter.cs" />
     <Compile Include="Exceptions\Converters\IExceptionConverter.cs" />
     <Compile Include="Exceptions\MissingModelException.cs" />
     <Compile Include="Exceptions\UnhandledLibraryException.cs" />
+    <Compile Include="Extensions\JavaCollectionExtensions.cs" />
     <Compile Include="Extensions\JavaListExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RelationTriple.cs" />
     <Compile Include="Sentence.cs" />
   </ItemGroup>
   <ItemGroup>
