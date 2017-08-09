@@ -39,7 +39,7 @@ namespace SimpleNetNlp
             {
                 return nlpSentence
                         .characterOffsetBegin()
-                        .ToList<java.lang.Integer, int>(x => int.Parse(x.toString()))
+                        .ToList<java.lang.Integer, int>(x => x.ToInt())
                         .AsReadOnly();
             }
         }
@@ -53,7 +53,7 @@ namespace SimpleNetNlp
             {
                 return nlpSentence
                         .characterOffsetEnd()
-                        .ToList<java.lang.Integer, int>(x => int.Parse(x.toString()))
+                        .ToList<java.lang.Integer, int>(x => x.ToInt())
                         .AsReadOnly();
             }
         }
@@ -180,6 +180,59 @@ namespace SimpleNetNlp
                     return nlpSentence
                             .openie()
                             .ToList<edu.stanford.nlp.util.Quadruple, RelationTriple>(x => new RelationTriple(x))
+                            .AsReadOnly();
+                }
+                catch (Exception e)
+                {
+                    throw exceptionConverter.WrapException(e);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Returns the governors of a sentence.
+        /// <para>The resulting list is of the same size as the original sentence, with each element being either
+        /// the governor index, or null if the node has no known governor.</para>
+        /// <para>The root has index -1.</para>
+        /// </summary>
+        /// <exception cref="Exceptions.MissingModelException">Thrown when library cannot find model files: PosTagger, Parser</exception>
+        /// <exception cref="Exceptions.UnhandledLibraryException">Thrown when an unexpected exception is caused by CoreNLP library.</exception>
+        public IReadOnlyCollection<int?> Governors
+        {
+            get
+            {
+                try
+                {
+                    return nlpSentence
+                            .governors()
+                            .ToList<java.util.Optional, int?>(x =>
+                                x.isPresent() ? (x.get() as java.lang.Integer).ToInt() : (int?)null)
+                            .AsReadOnly();
+                }
+                catch (Exception e)
+                {
+                    throw exceptionConverter.WrapException(e);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Returns the incoming dependency labels of a sentence.
+        /// <para>The resulting list is of the same size as the original sentence, with each element being either
+        /// the incoming dependency label, or null.</para>
+        /// </summary>
+        /// <exception cref="Exceptions.MissingModelException">Thrown when library cannot find model files: PosTagger, Parser</exception>
+        /// <exception cref="Exceptions.UnhandledLibraryException">Thrown when an unexpected exception is caused by CoreNLP library.</exception>
+        public IReadOnlyCollection<string> IncomingDependencyLabels
+        {
+            get
+            {
+                try
+                {
+                    return nlpSentence
+                            .incomingDependencyLabels()
+                            .ToList<java.util.Optional, string>(x =>
+                                x.isPresent() ? x.get() as string : null)
                             .AsReadOnly();
                 }
                 catch (Exception e)

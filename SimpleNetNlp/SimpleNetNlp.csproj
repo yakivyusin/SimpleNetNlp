@@ -190,6 +190,7 @@
     <Compile Include="Exceptions\MissingModelException.cs" />
     <Compile Include="Exceptions\UnhandledLibraryException.cs" />
     <Compile Include="Extensions\JavaCollectionExtensions.cs" />
+    <Compile Include="Extensions\JavaIntegerExtensions.cs" />
     <Compile Include="Extensions\JavaListExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RelationTriple.cs" />
