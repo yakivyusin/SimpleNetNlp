@@ -243,6 +243,28 @@ namespace SimpleNetNlp
         }
 
         /// <summary>
+        /// The sentiment of this sentence (e.g., positive / negative).
+        /// </summary>
+        /// <exception cref="Exceptions.MissingModelException">Thrown when library cannot find model files: LexParser, Sentiment</exception>
+        /// <exception cref="Exceptions.UnhandledLibraryException">Thrown when an unexpected exception is caused by CoreNLP library.</exception>
+        public SentimentClass Sentiment
+        {
+            get
+            {
+                try
+                {
+                    return nlpSentence
+                            .sentiment()
+                            .ToSentimentClass();
+                }
+                catch (Exception e)
+                {
+                    throw exceptionConverter.WrapException(e);
+                }
+            }
+        }
+
+        /// <summary>
         /// The words of the sentence.
         /// </summary>
         public IReadOnlyCollection<string> Words

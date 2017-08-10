@@ -13,6 +13,8 @@ namespace SimpleNetNlp.Exceptions.Converters
             new MissingNerConverter(),
             new MissingParserConverter(),
             new MissingNaturalliConverter(),
+            new MissingLexParserConverter(),
+            new MissingSentimentConverter(),
             new DefaultExceptionConverter()
         };
 

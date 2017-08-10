@@ -181,7 +181,9 @@
   <ItemGroup>
     <Compile Include="Document.cs" />
     <Compile Include="Exceptions\Converters\Concrete\DefaultExceptionConverter.cs" />
+    <Compile Include="Exceptions\Converters\Concrete\MissingSentimentConverter.cs" />
     <Compile Include="Exceptions\Converters\Concrete\MissingNaturalliConverter.cs" />
+    <Compile Include="Exceptions\Converters\Concrete\MissingLexParserConverter.cs" />
     <Compile Include="Exceptions\Converters\Concrete\MissingParserConverter.cs" />
     <Compile Include="Exceptions\Converters\Concrete\MissingNerConverter.cs" />
     <Compile Include="Exceptions\Converters\Concrete\MissingPosTaggerConverter.cs" />
@@ -192,9 +194,11 @@
     <Compile Include="Extensions\JavaCollectionExtensions.cs" />
     <Compile Include="Extensions\JavaIntegerExtensions.cs" />
     <Compile Include="Extensions\JavaListExtensions.cs" />
+    <Compile Include="Extensions\StanfordSentimentExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RelationTriple.cs" />
     <Compile Include="Sentence.cs" />
+    <Compile Include="SentimentClass.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
