@@ -2,12 +2,13 @@
 <package >
   <metadata>
     <id>SimpleNetNlp</id>
-    <version>3.7.0.1</version>
+    <version>3.8.0</version>
     <authors>yakivyusin</authors>
     <owners>yakivyusin</owners>
     <projectUrl>https://github.com/yakivyusin/SimpleNetNlp</projectUrl>
     <description>Simple C# wrapper for Stanford CoreNLP (see project url for details).</description>
-    <copyright>Copyright 2017</copyright>
+    <copyright>Copyright 2018</copyright>
     <tags>nlp stanford CoreNLP</tags>
+	<releaseNotes>Update version of CoreNLP to 3.8</releaseNotes>
   </metadata>
 </package>
