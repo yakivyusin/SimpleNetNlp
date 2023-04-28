@@ -6,7 +6,7 @@ namespace SimpleNetNlp;
 /// <summary>
 /// A representation of a single Sentence.
 /// </summary>
-public class Sentence
+public class Sentence : IEquatable<Sentence>
 {
     private readonly IExceptionConverter _exceptionConverter = new ExceptionConverter();
     private readonly edu.stanford.nlp.simple.Sentence _underlyingSentence;
@@ -242,5 +242,15 @@ public class Sentence
         .ToList<string>()
         .AsReadOnly();
 
+    /// <inheritdoc/>
+    public bool Equals(Sentence other) => _underlyingSentence.equals(other?._underlyingSentence);
+
+    /// <inheritdoc/>
     public override string ToString() => _underlyingSentence.toString();
+
+    /// <inheritdoc/>
+    public override bool Equals(object obj) => Equals(obj as Sentence);
+
+    /// <inheritdoc/>
+    public override int GetHashCode() => _underlyingSentence.hashCode();
 }

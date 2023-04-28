@@ -5,7 +5,7 @@ namespace SimpleNetNlp;
 /// <summary>
 /// A representation of a Document. Most blobs of raw text should become documents.
 /// </summary>
-public class Document
+public class Document : IEquatable<Document>
 {
     private readonly edu.stanford.nlp.simple.Document _underlyingDocument;
     private readonly Lazy<List<Sentence>> _sentences;
@@ -25,6 +25,16 @@ public class Document
     /// </summary>
     public List<Sentence> Sentences => _sentences.Value;
 
+    /// <inheritdoc/>
+    public override int GetHashCode() => _underlyingDocument.hashCode();
+
+    /// <inheritdoc/>
+    public override bool Equals(object obj) => Equals(obj as Document);
+
+    /// <inheritdoc/>
+    public bool Equals(Document other) => _underlyingDocument.equals(other?._underlyingDocument);
+
+    /// <inheritdoc/>
     public override string ToString() => _underlyingDocument.toString();
 
     private List<Sentence> LoadSentences() => _underlyingDocument
