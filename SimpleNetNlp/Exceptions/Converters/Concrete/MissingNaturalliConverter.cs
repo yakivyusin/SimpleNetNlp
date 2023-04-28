@@ -1,25 +1,16 @@
-﻿using System;
+﻿namespace SimpleNetNlp.Exceptions.Converters.Concrete;
 
-namespace SimpleNetNlp.Exceptions.Converters.Concrete
+internal class MissingNaturalliConverter : IExceptionConverter
 {
-    internal class MissingNaturalliConverter : IExceptionConverter
+    private const string NaturalliDefaultError = "Could not load clause splitter model at edu/stanford/nlp/models/naturalli/clauseSearcherModel.ser.gz";
+
+    public bool CanConvert(Exception exception) => exception switch
     {
-        private static readonly string naturalliDefaultError =
-            "Could not load clause splitter model at edu/stanford/nlp/models/naturalli/clauseSearcherModel.ser.gz";
+        edu.stanford.nlp.io.RuntimeIOException and { Message : NaturalliDefaultError } => true,
+        _ => false
+    };
 
-        public bool CanConvert(Exception exception)
-        {
-            if (exception == null) return false;
-            if (!(exception is edu.stanford.nlp.io.RuntimeIOException)) return false;
-
-            return exception.Message?.Equals(naturalliDefaultError) ?? false;
-        }
-
-        public Exception Convert(Exception exception)
-        {
-            if (!CanConvert(exception)) return null;
-
-            return new MissingModelException("Missing Naturalli Model (please install SimpleNetNlp.Models.Naturalli)", exception);
-        }
-    }
+    public Exception Convert(Exception exception) => CanConvert(exception) ?
+        new MissingModelException("Missing Naturalli Model (please install SimpleNetNlp.Models.Naturalli)", exception) :
+        null;
 }

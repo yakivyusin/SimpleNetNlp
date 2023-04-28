@@ -1,22 +1,21 @@
-﻿using System;
+﻿using JavaInt = java.lang.Integer;
 
-namespace SimpleNetNlp.Extensions
+namespace SimpleNetNlp.Extensions;
+
+/// <summary>
+/// Contains extension methods for java.lang.Integer
+/// </summary>
+internal static class JavaIntegerExtensions
 {
     /// <summary>
-    /// Contains extension methods for java.lang.Integer
+    /// Convert java.lang.Integer to plain C# int.
     /// </summary>
-    internal static class JavaIntegerExtensions
+    /// <param name="integer">Integer to convertion.</param>
+    /// <returns>A converted value.</returns>
+    internal static int ToInt(this JavaInt integer)
     {
-        /// <summary>
-        /// Convert java.lang.Integer to plain C# int.
-        /// </summary>
-        /// <param name="integer">Integer to convertion.</param>
-        /// <returns>A converted value.</returns>
-        internal static int ToInt(this java.lang.Integer integer)
-        {
-            if (integer == null) throw new NullReferenceException();
+        ArgumentNullException.ThrowIfNull(integer);
 
-            return int.Parse(integer.toString());
-        }
+        return int.Parse(integer.toString());
     }
 }

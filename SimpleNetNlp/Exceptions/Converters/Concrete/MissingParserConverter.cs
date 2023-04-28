@@ -1,25 +1,16 @@
-﻿using System;
+﻿namespace SimpleNetNlp.Exceptions.Converters.Concrete;
 
-namespace SimpleNetNlp.Exceptions.Converters.Concrete
+internal class MissingParserConverter : IExceptionConverter
 {
-    internal class MissingParserConverter : IExceptionConverter
+    private const string ParserDefaultError = "java.io.IOException: Unable to open \"edu/stanford/nlp/models/parser/nndep/english_UD.gz\" as class path, filename or URL";
+
+    public bool CanConvert(Exception exception) => exception switch
     {
-        private static readonly string parserDefaultError =
-            "java.io.IOException: Unable to open \"edu/stanford/nlp/models/parser/nndep/english_UD.gz\" as class path, filename or URL";
+        edu.stanford.nlp.io.RuntimeIOException and { Message: ParserDefaultError } => true,
+        _ => false
+    };
 
-        public bool CanConvert(Exception exception)
-        {
-            if (exception == null) return false;
-            if (!(exception is edu.stanford.nlp.io.RuntimeIOException)) return false;
-
-            return exception.Message?.Equals(parserDefaultError) ?? false;
-        }
-
-        public Exception Convert(Exception exception)
-        {
-            if (!CanConvert(exception)) return null;
-
-            return new MissingModelException("Missing Parser Model (please install SimpleNetNlp.Models.Parser)", exception);
-        }
-    }
+    public Exception Convert(Exception exception) => CanConvert(exception) ?
+        new MissingModelException("Missing Parser Model (please install SimpleNetNlp.Models.Parser)", exception) :
+        null;
 }

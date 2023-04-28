@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using JavaCollection = java.util.Collection;
 
 namespace SimpleNetNlp.Extensions
 {
@@ -18,14 +16,15 @@ namespace SimpleNetNlp.Extensions
         /// <param name="collection">Collection to convertion.</param>
         /// <param name="convertingFunction">Function for converting <typeparamref name="TSource"/> element to <typeparamref name="TTarget"/></param>
         /// <returns>A converted list.</returns>
-        internal static List<TTarget> ToList<TSource, TTarget>(this java.util.Collection collection, Func<TSource, TTarget> convertingFunction)
+        internal static List<TTarget> ToList<TSource, TTarget>(this JavaCollection collection, Func<TSource, TTarget> convertingFunction)
         {
-            if (collection == null) throw new NullReferenceException();
+            ArgumentNullException.ThrowIfNull(collection);
+            ArgumentNullException.ThrowIfNull(convertingFunction);
 
             return Enumerate(collection, convertingFunction).ToList();
         }
 
-        private static IEnumerable<TTarget> Enumerate<TSource, TTarget>(java.util.Collection collection, Func<TSource, TTarget> convertingFunction)
+        private static IEnumerable<TTarget> Enumerate<TSource, TTarget>(JavaCollection collection, Func<TSource, TTarget> convertingFunction)
         {
             var iterator = collection.iterator();
             while (iterator.hasNext())

@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="utf-8" ?>
-<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-	<ItemGroup>
-      <CopyNlpLibsSourcePath Include="$(ProjectDir)nlp-libs\**\*.*" /> 
-	</ItemGroup>
-    <Target Name="NlpLibsCopy" AfterTargets="Build">
-        <Copy SourceFiles="@(CopyNlpLibsSourcePath)" DestinationFolder="$(TargetDir)\%(CopySourcePath.RecursiveDir)" SkipUnchangedFiles="true" />
-    </Target>
-</Project>
