@@ -1,9 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.24720.0
+# Visual Studio Version 17
+VisualStudioVersion = 17.4.33110.190
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleNetNlp", "SimpleNetNlp\SimpleNetNlp.csproj", "{E068C61B-1768-4007-B037-3D3729763F9C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleNetNlp", "SimpleNetNlp\SimpleNetNlp.csproj", "{5BE991DF-75EE-4A2A-9E4B-2C74861D021D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -11,12 +11,15 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{E068C61B-1768-4007-B037-3D3729763F9C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{E068C61B-1768-4007-B037-3D3729763F9C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{E068C61B-1768-4007-B037-3D3729763F9C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{E068C61B-1768-4007-B037-3D3729763F9C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5BE991DF-75EE-4A2A-9E4B-2C74861D021D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5BE991DF-75EE-4A2A-9E4B-2C74861D021D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5BE991DF-75EE-4A2A-9E4B-2C74861D021D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5BE991DF-75EE-4A2A-9E4B-2C74861D021D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {263E48D4-0CDD-4081-B133-FCF1565DDBDB}
 	EndGlobalSection
 EndGlobal

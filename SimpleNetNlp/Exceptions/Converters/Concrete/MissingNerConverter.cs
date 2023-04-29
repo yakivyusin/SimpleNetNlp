@@ -1,25 +1,16 @@
-﻿using System;
+﻿namespace SimpleNetNlp.Exceptions.Converters.Concrete;
 
-namespace SimpleNetNlp.Exceptions.Converters.Concrete
+internal class MissingNerConverter : IExceptionConverter
 {
-    internal class MissingNerConverter : IExceptionConverter
+    private const string NerDefaultError = "java.io.IOException: Couldn't load classifier from edu/stanford/nlp/models/ner/english.all.3class.distsim.crf.ser.gz";
+
+    public bool CanConvert(Exception exception) => exception switch
     {
-        private static readonly string nerDefaultError =
-            "java.io.IOException: Couldn't load classifier from edu/stanford/nlp/models/ner/english.all.3class.distsim.crf.ser.gz";
+        edu.stanford.nlp.io.RuntimeIOException and { Message : NerDefaultError } => true,
+        _ => false
+    };
 
-        public bool CanConvert(Exception exception)
-        {
-            if (exception == null) return false;
-            if (!(exception is edu.stanford.nlp.io.RuntimeIOException)) return false;
-
-            return exception.Message?.Equals(nerDefaultError) ?? false;
-        }
-
-        public Exception Convert(Exception exception)
-        {
-            if (!CanConvert(exception)) return null;
-
-            return new MissingModelException("Missing Ner Model (please install SimpleNetNlp.Models.Ner)", exception);
-        }
-    }
+    public Exception Convert(Exception exception) => CanConvert(exception) ?
+        new MissingModelException("Missing Ner Model (please install SimpleNetNlp.Models.Ner)", exception) :
+        null;
 }

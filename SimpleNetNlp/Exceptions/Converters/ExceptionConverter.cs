@@ -1,28 +1,21 @@
 ﻿using SimpleNetNlp.Exceptions.Converters.Concrete;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 
-namespace SimpleNetNlp.Exceptions.Converters
+namespace SimpleNetNlp.Exceptions.Converters;
+
+internal class ExceptionConverter : IExceptionConverter
 {
-    internal class ExceptionConverter
+    private readonly IReadOnlyList<IExceptionConverter> _concreteConverters = new List<IExceptionConverter>()
     {
-        private List<IExceptionConverter> concreteConverters = new List<IExceptionConverter>()
-        {
-            new MissingPosTaggerConverter(),
-            new MissingNerConverter(),
-            new MissingParserConverter(),
-            new MissingNaturalliConverter(),
-            new MissingLexParserConverter(),
-            new MissingSentimentConverter(),
-            new DefaultExceptionConverter()
-        };
+        new MissingPosTaggerConverter(),
+        new MissingNerConverter(),
+        new MissingParserConverter(),
+        new MissingNaturalliConverter(),
+        new MissingLexParserConverter(),
+        new MissingSentimentConverter(),
+        new DefaultExceptionConverter()
+    };
 
-        public Exception WrapException(Exception exception)
-        {
-            return concreteConverters
-                .First(c => c.CanConvert(exception))
-                .Convert(exception);
-        }
-    }
+    public bool CanConvert(Exception exception) => _concreteConverters.Any(x => x.CanConvert(exception));
+
+    public Exception Convert(Exception exception) => _concreteConverters.First(x => x.CanConvert(exception)).Convert(exception);
 }

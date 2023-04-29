@@ -1,45 +1,43 @@
-﻿using System.Collections.Generic;
-using SimpleNetNlp.Extensions;
+﻿using SimpleNetNlp.Extensions;
 
-namespace SimpleNetNlp
+namespace SimpleNetNlp;
+
+/// <summary>
+/// A representation of a Document. Most blobs of raw text should become documents.
+/// </summary>
+public class Document : IEquatable<Document>
 {
+    private readonly edu.stanford.nlp.simple.Document _underlyingDocument;
+    private readonly Lazy<List<Sentence>> _sentences;
+
     /// <summary>
-    /// A representation of a Document. Most blobs of raw text should become documents.
+    /// Create a new document from the passed in text.
     /// </summary>
-    public class Document
+    /// <param name="text">The text of the document.</param>
+    public Document(string text)
     {
-        private edu.stanford.nlp.simple.Document nlpDoc;
-        private List<Sentence> sentences;
-
-        /// <summary>
-        /// Create a new document from the passed in text.
-        /// </summary>
-        /// <param name="text">The text of the document.</param>
-        public Document(string text)
-        {
-            nlpDoc = new edu.stanford.nlp.simple.Document(text);
-        }
-
-        /// <summary>
-        /// Get the sentences in this document, as a list.
-        /// </summary>
-        public List<Sentence> Sentences
-        {
-            get
-            {
-                if (sentences == null)
-                {
-                    sentences = nlpDoc
-                                    .sentences()
-                                    .ToList<edu.stanford.nlp.simple.Sentence, Sentence>(x => new Sentence(x));
-                }
-                return sentences;
-            }
-        }
-
-        public override string ToString()
-        {
-            return nlpDoc.toString();
-        }
+        _underlyingDocument = new edu.stanford.nlp.simple.Document(text);
+        _sentences = new Lazy<List<Sentence>>(LoadSentences);
     }
+
+    /// <summary>
+    /// Get the sentences in this document, as a list.
+    /// </summary>
+    public List<Sentence> Sentences => _sentences.Value;
+
+    /// <inheritdoc/>
+    public override int GetHashCode() => _underlyingDocument.hashCode();
+
+    /// <inheritdoc/>
+    public override bool Equals(object obj) => Equals(obj as Document);
+
+    /// <inheritdoc/>
+    public bool Equals(Document other) => _underlyingDocument.equals(other?._underlyingDocument);
+
+    /// <inheritdoc/>
+    public override string ToString() => _underlyingDocument.toString();
+
+    private List<Sentence> LoadSentences() => _underlyingDocument
+        .sentences()
+        .ToList<edu.stanford.nlp.simple.Sentence, Sentence>(x => new Sentence(x));
 }

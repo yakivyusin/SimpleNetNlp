@@ -1,10 +1,7 @@
-﻿using System;
+﻿namespace SimpleNetNlp.Exceptions.Converters;
 
-namespace SimpleNetNlp.Exceptions.Converters
+internal interface IExceptionConverter
 {
-    internal interface IExceptionConverter
-    {
-        bool CanConvert(Exception exception);
-        Exception Convert(Exception exception);
-    }
+    bool CanConvert(Exception exception);
+    Exception Convert(Exception exception);
 }
