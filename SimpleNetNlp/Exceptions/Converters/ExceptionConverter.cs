@@ -12,7 +12,8 @@ internal class ExceptionConverter : IExceptionConverter
         new MissingNaturalliConverter(),
         new MissingLexParserConverter(),
         new MissingSentimentConverter(),
-        new DefaultExceptionConverter()
+        new DefaultJavaExceptionConverter(),
+        new NoOpExceptionConverter()
     };
 
     public bool CanConvert(Exception exception) => _concreteConverters.Any(x => x.CanConvert(exception));
