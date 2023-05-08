@@ -19,7 +19,16 @@
     <PackageReadmeFile>README.md</PackageReadmeFile>
   </PropertyGroup>
 
+  <PropertyGroup>
+    <WeaverConfiguration>
+      <Weavers>
+        <MethodBoundaryAspect />
+      </Weavers>
+    </WeaverConfiguration>
+  </PropertyGroup>
+
   <ItemGroup>
+    <PackageReference Include="MethodBoundaryAspect.Fody" Version="2.0.149-tags-v2-0-149-pre.1" />
     <PackageReference Include="Stanford.NLP.CoreNLP" Version="4.5.0" PrivateAssets="compile;build;buildTransitive" />
   </ItemGroup>
 
