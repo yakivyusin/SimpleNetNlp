@@ -159,6 +159,11 @@ public class Sentence : IEquatable<Sentence>
         .sentiment()
         .ToSentimentClass();
 
+    /// <summary>
+    /// Returns the <see cref="SentenceAlgorithms"/> instance for this sentence.
+    /// </summary>
+    public SentenceAlgorithms Algorithms => new(_underlyingSentence.algorithms());
+
     /// <inheritdoc/>
     public bool Equals(Sentence other) => _underlyingSentence.equals(other?._underlyingSentence);
 
@@ -170,4 +175,7 @@ public class Sentence : IEquatable<Sentence>
 
     /// <inheritdoc/>
     public override int GetHashCode() => _underlyingSentence.hashCode();
+
+    public static implicit operator edu.stanford.nlp.simple.Sentence(Sentence s) => s._underlyingSentence;
+    public static explicit operator Sentence(edu.stanford.nlp.simple.Sentence s) => new(s);
 }
