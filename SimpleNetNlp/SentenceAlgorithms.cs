@@ -43,6 +43,15 @@ public class SentenceAlgorithms : IEquatable<SentenceAlgorithms>
         .allSpans()
         .ToEnumerable<java.util.List, IReadOnlyList<string>>(x => x.ToList<string>());
 
+    /// <summary>
+    /// Returns the index of the head word for a given span of the sentence, based off of the dependency parse.
+    /// </summary>
+    /// <exception cref="Exceptions.MissingModelException">Thrown when library cannot find model files: PosTagger, Parser.</exception>
+    /// <exception cref="Exceptions.UnhandledLibraryException">Thrown when an unexpected exception is caused by CoreNLP library.</exception>
+    [ExceptionConverterAspect]
+    public int HeadOfSpan(Range span) => _underlyingSentenceAlgorithms
+        .headOfSpan(span.ToJavaSpan(_underlyingSentenceAlgorithms.sentence.length()));
+
     /// <inheritdoc/>
     public bool Equals(SentenceAlgorithms other) => _underlyingSentenceAlgorithms.equals(other?._underlyingSentenceAlgorithms);
 

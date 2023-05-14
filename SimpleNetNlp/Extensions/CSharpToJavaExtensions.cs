@@ -13,6 +13,10 @@ internal static class CSharpToJavaExtensions
 
     internal static java.util.function.Function ToJavaSelector<T>(this Func<Sentence, IEnumerable<T>> func) => new FuncWrapper<edu.stanford.nlp.simple.Sentence, java.util.List>(s => func((Sentence)s).ToJavaList());
 
+    internal static edu.stanford.nlp.ie.machinereading.structure.Span ToJavaSpan(this Range range, int length) => new(
+        range.Start.GetOffset(length),
+        range.End.GetOffset(length));
+
     private class FuncWrapper<T, TReturn> : java.util.function.Function
     {
         private readonly Func<T, TReturn> _func;
