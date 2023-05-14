@@ -91,6 +91,26 @@ public class SentenceAlgorithms : IEquatable<SentenceAlgorithms>
         .keyphrases(selector.ToJavaSelector())
         .ToList<string>();
 
+    /// <summary>
+    /// Find the dependency path between two words in a sentence.
+    /// </summary>
+    /// <exception cref="Exceptions.MissingModelException">Thrown when library cannot find model files: PosTagger, Parser.</exception>
+    /// <exception cref="Exceptions.UnhandledLibraryException">Thrown when an unexpected exception is caused by CoreNLP library.</exception>
+    [ExceptionConverterAspect]
+    public List<string> DependencyPathBetween(int startWordIndex, int endWordIndex) => _underlyingSentenceAlgorithms
+        .dependencyPathBetween(startWordIndex, endWordIndex)
+        .ToList<string>();
+
+    /// <summary>
+    /// Find the dependency path between two words in a sentence.
+    /// </summary>
+    /// <exception cref="Exceptions.MissingModelException">Thrown when library cannot find model files: PosTagger, Parser.</exception>
+    /// <exception cref="Exceptions.UnhandledLibraryException">Thrown when an unexpected exception is caused by CoreNLP library.</exception>
+    [ExceptionConverterAspect]
+    public List<string> DependencyPathBetween(int startWordIndex, int endWordIndex, Func<Sentence, IEnumerable<string>> selector) => _underlyingSentenceAlgorithms
+        .dependencyPathBetween(startWordIndex, endWordIndex, java.util.Optional.of(selector.ToJavaSelector()))
+        .ToList<string>();
+
     /// <inheritdoc/>
     public bool Equals(SentenceAlgorithms other) => _underlyingSentenceAlgorithms.equals(other?._underlyingSentenceAlgorithms);
 
