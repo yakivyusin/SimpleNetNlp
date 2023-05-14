@@ -61,6 +61,36 @@ public class SentenceAlgorithms : IEquatable<SentenceAlgorithms>
     public T ModeInSpan<T>(Range span, Func<Sentence, IEnumerable<T>> selector) => (T)_underlyingSentenceAlgorithms
         .modeInSpan(span.ToJavaSpan(_underlyingSentenceAlgorithms.sentence.length()), selector.ToJavaSelector());
 
+    /// <summary>
+    /// Returns a collection of keyphrases, defined as relevant noun phrases and verbs in the sentence. Each token of the sentence is consumed at most once.
+    /// </summary>
+    /// <exception cref="Exceptions.MissingModelException">Thrown when library cannot find model files: PosTagger.</exception>
+    /// <exception cref="Exceptions.UnhandledLibraryException">Thrown when an unexpected exception is caused by CoreNLP library.</exception>
+    [ExceptionConverterAspect]
+    public List<Range> KeyphraseSpans() => _underlyingSentenceAlgorithms
+        .keyphraseSpans()
+        .ToList<edu.stanford.nlp.ie.machinereading.structure.Span, Range>(x => x.start()..x.end());
+
+    /// <summary>
+    /// Get the keyphrases of the sentence, using the words of the sentence to convert a span into a keyphrase.
+    /// </summary>
+    /// <exception cref="Exceptions.MissingModelException">Thrown when library cannot find model files: PosTagger.</exception>
+    /// <exception cref="Exceptions.UnhandledLibraryException">Thrown when an unexpected exception is caused by CoreNLP library.</exception>
+    [ExceptionConverterAspect]
+    public List<string> Keyphrases() => _underlyingSentenceAlgorithms
+        .keyphrases()
+        .ToList<string>();
+
+    /// <summary>
+    /// Get the keyphrases of the sentence as a list of Strings.
+    /// </summary>
+    /// <exception cref="Exceptions.MissingModelException">Thrown when library cannot find model files: PosTagger.</exception>
+    /// <exception cref="Exceptions.UnhandledLibraryException">Thrown when an unexpected exception is caused by CoreNLP library.</exception>
+    [ExceptionConverterAspect]
+    public List<string> Keyphrases(Func<Sentence, IEnumerable<string>> selector) => _underlyingSentenceAlgorithms
+        .keyphrases(selector.ToJavaSelector())
+        .ToList<string>();
+
     /// <inheritdoc/>
     public bool Equals(SentenceAlgorithms other) => _underlyingSentenceAlgorithms.equals(other?._underlyingSentenceAlgorithms);
 
