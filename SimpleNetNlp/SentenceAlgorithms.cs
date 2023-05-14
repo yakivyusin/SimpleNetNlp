@@ -52,6 +52,15 @@ public class SentenceAlgorithms : IEquatable<SentenceAlgorithms>
     public int HeadOfSpan(Range span) => _underlyingSentenceAlgorithms
         .headOfSpan(span.ToJavaSpan(_underlyingSentenceAlgorithms.sentence.length()));
 
+    /// <summary>
+    /// Selects the most common element of the given type in the given span of the sentence.
+    /// <para>This is useful for, e.g., finding the most likely NER span of a given span, or the most likely POS tag of a given span.</para>
+    /// </summary>
+    /// <exception cref="Exceptions.UnhandledLibraryException">Thrown when an unexpected exception is caused by CoreNLP library.</exception>
+    [ExceptionConverterAspect]
+    public T ModeInSpan<T>(Range span, Func<Sentence, IEnumerable<T>> selector) => (T)_underlyingSentenceAlgorithms
+        .modeInSpan(span.ToJavaSpan(_underlyingSentenceAlgorithms.sentence.length()), selector.ToJavaSelector());
+
     /// <inheritdoc/>
     public bool Equals(SentenceAlgorithms other) => _underlyingSentenceAlgorithms.equals(other?._underlyingSentenceAlgorithms);
 
