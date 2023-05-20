@@ -1,4 +1,4 @@
-﻿using SimpleNetNlp.Exceptions.Converters;
+﻿using SimpleNetNlp.Exceptions;
 using SimpleNetNlp.Extensions;
 
 namespace SimpleNetNlp;
@@ -8,7 +8,6 @@ namespace SimpleNetNlp;
 /// </summary>
 public class Sentence : IEquatable<Sentence>
 {
-    private readonly IExceptionConverter _exceptionConverter = new ExceptionConverter();
     private readonly edu.stanford.nlp.simple.Sentence _underlyingSentence;
 
     /// <summary>
@@ -31,7 +30,7 @@ public class Sentence : IEquatable<Sentence>
     /// <summary>
     /// The begin position of each token in the sentence.
     /// </summary>
-    public IReadOnlyCollection<int> CharacterOffsetBegin => _underlyingSentence
+    public IReadOnlyList<int> CharacterOffsetBegin => _underlyingSentence
         .characterOffsetBegin()
         .ToList<java.lang.Integer, int>(x => x.ToInt())
         .AsReadOnly();
@@ -39,7 +38,7 @@ public class Sentence : IEquatable<Sentence>
     /// <summary>
     /// The end position of each token in the sentence.
     /// </summary>
-    public IReadOnlyCollection<int> CharacterOffsetEnd => _underlyingSentence
+    public IReadOnlyList<int> CharacterOffsetEnd => _underlyingSentence
         .characterOffsetEnd()
         .ToList<java.lang.Integer, int>(x => x.ToInt())
         .AsReadOnly();
@@ -60,100 +59,70 @@ public class Sentence : IEquatable<Sentence>
     public int SentenceTokenOffsetEnd => _underlyingSentence.sentenceTokenOffsetEnd();
 
     /// <summary>
-    /// The lemmas of the sentence, one for each token in the sentence.
+    /// The words of the sentence.
+    /// </summary>
+    public IReadOnlyList<string> Words => _underlyingSentence
+        .words()
+        .ToList<string>()
+        .AsReadOnly();
+
+    /// <summary>
+    /// The original (unprocessed) words of the sentence.
+    /// </summary>
+    public IReadOnlyList<string> OriginalWords => _underlyingSentence
+        .originalTexts()
+        .ToList<string>()
+        .AsReadOnly();
+
+    /// <summary>
+    /// Returns the lemmas of the sentence, one for each token in the sentence.
     /// </summary>
     /// <exception cref="Exceptions.MissingModelException">Thrown when library cannot find model files: PosTagger</exception>
     /// <exception cref="Exceptions.UnhandledLibraryException">Thrown when an unexpected exception is caused by CoreNLP library.</exception>
-    public IReadOnlyCollection<string> Lemmas
-    {
-        get
-        {
-            try
-            {
-                return _underlyingSentence
-                    .lemmas()
-                    .ToList<string>()
-                    .AsReadOnly();
-            }
-            catch (Exception e)
-            {
-                throw _exceptionConverter.Convert(e);
-            }    
-        }
-    }
+    [ExceptionConverterAspect]
+    public IReadOnlyList<string> Lemmas() => _underlyingSentence
+        .lemmas()
+        .ToList<string>()
+        .AsReadOnly();
 
     /// <summary>
-    /// The named entity tags of the sentence, one for each token in the sentence.
+    /// Returns the named entity tags of the sentence, one for each token in the sentence.
     /// </summary>
     /// <exception cref="Exceptions.MissingModelException">Thrown when library cannot find model files: PosTagger, Ner</exception>
     /// <exception cref="Exceptions.UnhandledLibraryException">Thrown when an unexpected exception is caused by CoreNLP library.</exception>
-    public IReadOnlyCollection<string> NerTags
+    [ExceptionConverterAspect]
+    public IReadOnlyList<string> NerTags()
     {
-        get
-        {
-            var props = new java.util.Properties();
-            props.setProperty("ner.useSUTime", "0");
+        var props = new java.util.Properties();
+        props.setProperty("ner.useSUTime", "0");
 
-            try
-            {
-                return _underlyingSentence
-                    .nerTags(props)
-                    .ToList<string>()
-                    .AsReadOnly();
-            }
-            catch (Exception e)
-            {
-                throw _exceptionConverter.Convert(e);
-            }
-        }
+        return _underlyingSentence
+            .nerTags(props)
+            .ToList<string>()
+            .AsReadOnly();
     }
 
     /// <summary>
-    /// The part of speech tags of the sentence, one for each token in the sentence.
+    /// Returns the part of speech tags of the sentence, one for each token in the sentence.
     /// </summary>
     /// <exception cref="Exceptions.MissingModelException">Thrown when library cannot find model files: PosTagger</exception>
     /// <exception cref="Exceptions.UnhandledLibraryException">Thrown when an unexpected exception is caused by CoreNLP library.</exception>
-    public IReadOnlyCollection<string> PosTags
-    {
-        get
-        {
-            try
-            {
-                return _underlyingSentence
-                    .posTags()
-                    .ToList<string>()
-                    .AsReadOnly();
-            }
-            catch (Exception e)
-            {
-                throw _exceptionConverter.Convert(e);
-            }
-        }
-    }
+    [ExceptionConverterAspect]
+    public IReadOnlyList<string> PosTags() => _underlyingSentence
+        .posTags()
+        .ToList<string>()
+        .AsReadOnly();
 
     /// <summary>
-    /// Get the OpenIE triples associated with this sentence. 
-    /// <para>Returns a collection of RelationTriple objects representing the OpenIE triples in the sentence.</para>
+    /// Returns a collection of <see cref="RelationTriple"/> objects representing the OpenIE triples in the sentence.
     /// </summary>
     /// <exception cref="Exceptions.MissingModelException">Thrown when library cannot find model files: PosTagger, Parser, Naturalli</exception>
     /// <exception cref="Exceptions.UnhandledLibraryException">Thrown when an unexpected exception is caused by CoreNLP library.</exception>
-    public IReadOnlyCollection<RelationTriple> OpenIe
-    {
-        get
-        {
-            try
-            {
-                return _underlyingSentence
-                    .openie()
-                    .ToList<edu.stanford.nlp.util.Quadruple, RelationTriple>(x => new RelationTriple(x))
-                    .AsReadOnly();
-            }
-            catch (Exception e)
-            {
-                throw _exceptionConverter.Convert(e);
-            }
-        }
-    }
+    [ExceptionConverterAspect]
+    public IReadOnlyList<RelationTriple> OpenIe() => _underlyingSentence
+        .openie()
+        .ToList<edu.stanford.nlp.util.Quadruple, RelationTriple>(x => new RelationTriple(x))
+        .AsReadOnly();
 
     /// <summary>
     /// Returns the governors of a sentence.
@@ -162,23 +131,11 @@ public class Sentence : IEquatable<Sentence>
     /// </summary>
     /// <exception cref="Exceptions.MissingModelException">Thrown when library cannot find model files: PosTagger, Parser</exception>
     /// <exception cref="Exceptions.UnhandledLibraryException">Thrown when an unexpected exception is caused by CoreNLP library.</exception>
-    public IReadOnlyCollection<int?> Governors
-    {
-        get
-        {
-            try
-            {
-                return _underlyingSentence
-                    .governors()
-                    .ToList<java.util.Optional, int?>(x => x.isPresent() ? (x.get() as java.lang.Integer).ToInt() : null)
-                    .AsReadOnly();
-            }
-            catch (Exception e)
-            {
-                throw _exceptionConverter.Convert(e);
-            }
-        }
-    }
+    [ExceptionConverterAspect]
+    public IReadOnlyList<int?> Governors() => _underlyingSentence
+        .governors()
+        .ToList<java.util.Optional, int?>(x => x.isPresent() ? (x.get() as java.lang.Integer).ToInt() : null)
+        .AsReadOnly();
 
     /// <summary>
     /// Returns the incoming dependency labels of a sentence.
@@ -186,61 +143,26 @@ public class Sentence : IEquatable<Sentence>
     /// </summary>
     /// <exception cref="Exceptions.MissingModelException">Thrown when library cannot find model files: PosTagger, Parser</exception>
     /// <exception cref="Exceptions.UnhandledLibraryException">Thrown when an unexpected exception is caused by CoreNLP library.</exception>
-    public IReadOnlyCollection<string> IncomingDependencyLabels
-    {
-        get
-        {
-            try
-            {
-                return _underlyingSentence
-                    .incomingDependencyLabels()
-                    .ToList<java.util.Optional, string>(x => x.isPresent() ? x.get() as string : null)
-                    .AsReadOnly();
-            }
-            catch (Exception e)
-            {
-                throw _exceptionConverter.Convert(e);
-            }
-        }
-    }
+    [ExceptionConverterAspect]
+    public IReadOnlyList<string> IncomingDependencyLabels() => _underlyingSentence
+        .incomingDependencyLabels()
+        .ToList<java.util.Optional, string>(x => x.isPresent() ? x.get() as string : null)
+        .AsReadOnly();
 
     /// <summary>
-    /// The sentiment of this sentence (e.g., positive / negative).
+    /// Returns the sentiment of this sentence (e.g., positive / negative). See the <see cref="SentimentClass"/> enum for possible values.
     /// </summary>
     /// <exception cref="Exceptions.MissingModelException">Thrown when library cannot find model files: LexParser, Sentiment</exception>
     /// <exception cref="Exceptions.UnhandledLibraryException">Thrown when an unexpected exception is caused by CoreNLP library.</exception>
-    public SentimentClass Sentiment
-    {
-        get
-        {
-            try
-            {
-                return _underlyingSentence
-                    .sentiment()
-                    .ToSentimentClass();
-            }
-            catch (Exception e)
-            {
-                throw _exceptionConverter.Convert(e);
-            }
-        }
-    }
+    [ExceptionConverterAspect]
+    public SentimentClass Sentiment() => _underlyingSentence
+        .sentiment()
+        .ToSentimentClass();
 
     /// <summary>
-    /// The words of the sentence.
+    /// Returns the <see cref="SentenceAlgorithms"/> instance for this sentence.
     /// </summary>
-    public IReadOnlyCollection<string> Words => _underlyingSentence
-        .words()
-        .ToList<string>()
-        .AsReadOnly();
-
-    /// <summary>
-    /// The original (unprocessed) words of the sentence.
-    /// </summary>
-    public IReadOnlyCollection<string> OriginalWords => _underlyingSentence
-        .originalTexts()
-        .ToList<string>()
-        .AsReadOnly();
+    public SentenceAlgorithms Algorithms => new(_underlyingSentence.algorithms());
 
     /// <inheritdoc/>
     public bool Equals(Sentence other) => _underlyingSentence.equals(other?._underlyingSentence);
@@ -253,4 +175,7 @@ public class Sentence : IEquatable<Sentence>
 
     /// <inheritdoc/>
     public override int GetHashCode() => _underlyingSentence.hashCode();
+
+    public static implicit operator edu.stanford.nlp.simple.Sentence(Sentence s) => s._underlyingSentence;
+    public static explicit operator Sentence(edu.stanford.nlp.simple.Sentence s) => new(s);
 }

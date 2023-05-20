@@ -6,24 +6,36 @@
     <Nullable>disable</Nullable>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
-    <Version>4.5.0</Version>
+    <Version>4.5.0.1</Version>
     <Authors>yakivyusin</Authors>
     <Company />
-    <Description>Simple C# wrapper for Stanford CoreNLP (see project url for details).</Description>
+    <Description>Simple C# wrapper for Stanford CoreNLP (see README for details).</Description>
     <Copyright>Copyright 2018</Copyright>
     <PackageProjectUrl>https://github.com/yakivyusin/SimpleNetNlp</PackageProjectUrl>
     <RepositoryUrl>https://github.com/yakivyusin/SimpleNetNlp</RepositoryUrl>
-    <PackageTags>nlp stanford CoreNLP</PackageTags>
-    <PackageReleaseNotes>Update version of CoreNLP to 4.5.0 with .NET 6 support.</PackageReleaseNotes>
+    <PackageTags>nlp stanford CoreNLP POS NER sentiment governors lemmas</PackageTags>
+    <PackageReleaseNotes>- BREAKING CHANGE: Lemmas, NerTags, PosTags, OpenIe, Governors, IncomingDependencyLabels, and Sentiment are now methods instead of properties.
+- The SentenceAlgorithms API is exposed. Use Sentence.Algorithms to access it.</PackageReleaseNotes>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <WeaverConfiguration>
+      <Weavers>
+        <MethodBoundaryAspect />
+      </Weavers>
+    </WeaverConfiguration>
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="MethodBoundaryAspect.Fody" Version="2.0.149-tags-v2-0-149-pre.1" />
     <PackageReference Include="Stanford.NLP.CoreNLP" Version="4.5.0" PrivateAssets="compile;build;buildTransitive" />
   </ItemGroup>
 
   <ItemGroup>
     <None Include="$(OutputPath)\*.dll" Exclude="$(OutputPath)\$(AssemblyName).dll" Pack="true" PackagePath="buildTransitive" Visible="false" />
+    <None Include="..\README.md" Pack="true" PackagePath="\" Visible="false" />
   </ItemGroup>
 
 </Project>
