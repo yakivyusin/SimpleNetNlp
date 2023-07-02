@@ -25,6 +25,7 @@ public class Sentence : IEquatable<Sentence>
     internal Sentence(edu.stanford.nlp.simple.Sentence underlyingSentence)
     {
         _underlyingSentence = underlyingSentence;
+        _underlyingSentence.Properties().setProperty("ner.useSUTime", "0");
     }
 
     /// <summary>
@@ -112,16 +113,10 @@ public class Sentence : IEquatable<Sentence>
     /// <exception cref="Exceptions.MissingModelException">Thrown when library cannot find model files: PosTagger, Ner</exception>
     /// <exception cref="Exceptions.UnhandledLibraryException">Thrown when an unexpected exception is caused by CoreNLP library.</exception>
     [ExceptionConverterAspect]
-    public IReadOnlyList<string> NerTags()
-    {
-        var props = new java.util.Properties();
-        props.setProperty("ner.useSUTime", "0");
-
-        return _underlyingSentence
-            .nerTags(props)
-            .ToList<string>()
-            .AsReadOnly();
-    }
+    public IReadOnlyList<string> NerTags() => _underlyingSentence
+        .nerTags()
+        .ToList<string>()
+        .AsReadOnly();
 
     /// <summary>
     /// Returns the part of speech tags of the sentence, one for each token in the sentence.
@@ -179,6 +174,28 @@ public class Sentence : IEquatable<Sentence>
     public SentimentClass Sentiment() => _underlyingSentence
         .sentiment()
         .ToSentimentClass();
+
+    /// <summary>
+    /// Returns all mentions of any NER tag, as a list of surface forms.
+    /// </summary>
+    /// <exception cref="Exceptions.MissingModelException">Thrown when library cannot find model files: PosTagger, Ner</exception>
+    /// <exception cref="Exceptions.UnhandledLibraryException">Thrown when an unexpected exception is caused by CoreNLP library.</exception>
+    [ExceptionConverterAspect]
+    public IReadOnlyList<string> Mentions() => _underlyingSentence
+        .mentions()
+        .ToList<string>()
+        .AsReadOnly();
+
+    /// <summary>
+    /// Returns all mentions of the given NER tag, as a list of surface forms.
+    /// </summary>
+    /// <exception cref="Exceptions.MissingModelException">Thrown when library cannot find model files: PosTagger, Ner</exception>
+    /// <exception cref="Exceptions.UnhandledLibraryException">Thrown when an unexpected exception is caused by CoreNLP library.</exception>
+    [ExceptionConverterAspect]
+    public IReadOnlyList<string> Mentions(string nerTag) => _underlyingSentence
+        .mentions(nerTag)
+        .ToList<string>()
+        .AsReadOnly();
 
     /// <summary>
     /// Returns the <see cref="SentenceAlgorithms"/> instance for this sentence.

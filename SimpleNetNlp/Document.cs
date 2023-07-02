@@ -18,6 +18,7 @@ public class Document : IEquatable<Document>
     public Document(string text)
     {
         _underlyingDocument = new edu.stanford.nlp.simple.Document(text);
+        _underlyingDocument.Properties().setProperty("ner.useSUTime", "0");
         _sentences = new Lazy<List<Sentence>>(LoadSentences);
     }
 
@@ -35,12 +36,14 @@ public class Document : IEquatable<Document>
     /// Returns an indented JSON dump of this document.
     /// <para>Optionally, you can also specify a number of <paramref name="actions"/> to call on the document before dumping it to JSON. This allows the user to ensure that certain annotations have been computed before the document is dumped.</para>
     /// </summary>
+    /// <exception cref="Exceptions.UnhandledLibraryException">Thrown when an unexpected exception is caused by CoreNLP library.</exception>
     public string ToJson(params Action<Sentence>[] actions) => ToJson(true, actions);
 
     /// <summary>
     /// Returns a JSON dump of this document (indented or not).
     /// <para>Optionally, you can also specify a number of <paramref name="actions"/> to call on the document before dumping it to JSON. This allows the user to ensure that certain annotations have been computed before the document is dumped.</para>
     /// </summary>
+    /// <exception cref="Exceptions.UnhandledLibraryException">Thrown when an unexpected exception is caused by CoreNLP library.</exception>
     [ExceptionConverterAspect]
     public string ToJson(bool indentation, params Action<Sentence>[] actions) => indentation ?
         _underlyingDocument.json(actions.Select(a => a.ToJavaSelector<object>()).ToArray()) :
@@ -50,12 +53,14 @@ public class Document : IEquatable<Document>
     /// Returns an indented XML dump of this document.
     /// <para>Optionally, you can also specify a number of <paramref name="actions"/> to call on the document before dumping it to XML. This allows the user to ensure that certain annotations have been computed before the document is dumped.</para>
     /// </summary>
+    /// <exception cref="Exceptions.UnhandledLibraryException">Thrown when an unexpected exception is caused by CoreNLP library.</exception>
     public string ToXml(params Action<Sentence>[] actions) => ToXml(true, actions);
 
     /// <summary>
     /// Returns a XML dump of this document (indented or not).
     /// <para>Optionally, you can also specify a number of <paramref name="actions"/> to call on the document before dumping it to XML. This allows the user to ensure that certain annotations have been computed before the document is dumped.</para>
     /// </summary>
+    /// <exception cref="Exceptions.UnhandledLibraryException">Thrown when an unexpected exception is caused by CoreNLP library.</exception>
     [ExceptionConverterAspect]
     public string ToXml(bool indentation, params Action<Sentence>[] actions) => indentation ?
         _underlyingDocument.xml(actions.Select(a => a.ToJavaSelector<object>()).ToArray()) :
