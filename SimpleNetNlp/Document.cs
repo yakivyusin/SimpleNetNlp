@@ -1,4 +1,5 @@
-﻿using SimpleNetNlp.Extensions;
+﻿using SimpleNetNlp.Exceptions;
+using SimpleNetNlp.Extensions;
 
 namespace SimpleNetNlp;
 
@@ -24,6 +25,41 @@ public class Document : IEquatable<Document>
     /// Get the sentences in this document, as a list.
     /// </summary>
     public List<Sentence> Sentences => _sentences.Value;
+
+    /// <summary>
+    /// Get the original (raw) text of this document.
+    /// </summary>
+    public string OriginalText => _underlyingDocument.text();
+
+    /// <summary>
+    /// Returns an indented JSON dump of this document.
+    /// <para>Optionally, you can also specify a number of <paramref name="actions"/> to call on the document before dumping it to JSON. This allows the user to ensure that certain annotations have been computed before the document is dumped.</para>
+    /// </summary>
+    public string ToJson(params Action<Sentence>[] actions) => ToJson(true, actions);
+
+    /// <summary>
+    /// Returns a JSON dump of this document (indented or not).
+    /// <para>Optionally, you can also specify a number of <paramref name="actions"/> to call on the document before dumping it to JSON. This allows the user to ensure that certain annotations have been computed before the document is dumped.</para>
+    /// </summary>
+    [ExceptionConverterAspect]
+    public string ToJson(bool indentation, params Action<Sentence>[] actions) => indentation ?
+        _underlyingDocument.json(actions.Select(a => a.ToJavaSelector<object>()).ToArray()) :
+        _underlyingDocument.jsonMinified(actions.Select(a => a.ToJavaSelector<object>()).ToArray());
+
+    /// <summary>
+    /// Returns an indented XML dump of this document.
+    /// <para>Optionally, you can also specify a number of <paramref name="actions"/> to call on the document before dumping it to XML. This allows the user to ensure that certain annotations have been computed before the document is dumped.</para>
+    /// </summary>
+    public string ToXml(params Action<Sentence>[] actions) => ToXml(true, actions);
+
+    /// <summary>
+    /// Returns a XML dump of this document (indented or not).
+    /// <para>Optionally, you can also specify a number of <paramref name="actions"/> to call on the document before dumping it to XML. This allows the user to ensure that certain annotations have been computed before the document is dumped.</para>
+    /// </summary>
+    [ExceptionConverterAspect]
+    public string ToXml(bool indentation, params Action<Sentence>[] actions) => indentation ?
+        _underlyingDocument.xml(actions.Select(a => a.ToJavaSelector<object>()).ToArray()) :
+        _underlyingDocument.xmlMinified(actions.Select(a => a.ToJavaSelector<object>()).ToArray());
 
     /// <inheritdoc/>
     public override int GetHashCode() => _underlyingDocument.hashCode();
