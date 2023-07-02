@@ -75,6 +75,27 @@ public class Sentence : IEquatable<Sentence>
         .AsReadOnly();
 
     /// <summary>
+    /// Get the original (raw) text of this sentence.
+    /// </summary>
+    public string OriginalText => _underlyingSentence.text();
+
+    /// <summary>
+    /// Get the whitespace before each token in the sentence.
+    /// </summary>
+    public IReadOnlyList<string> Before => _underlyingSentence
+        .before()
+        .ToList<string>()
+        .AsReadOnly();
+
+    /// <summary>
+    /// Get the whitespace after each token in the sentence.
+    /// </summary>
+    public IReadOnlyList<string> After => _underlyingSentence
+        .after()
+        .ToList<string>()
+        .AsReadOnly();
+
+    /// <summary>
     /// Returns the lemmas of the sentence, one for each token in the sentence.
     /// </summary>
     /// <exception cref="Exceptions.MissingModelException">Thrown when library cannot find model files: PosTagger</exception>
