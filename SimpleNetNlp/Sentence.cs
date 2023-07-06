@@ -198,6 +198,17 @@ public class Sentence : IEquatable<Sentence>
         .AsReadOnly();
 
     /// <summary>
+    /// Returns a collection of <see cref="RelationTriple"/> objects representing the KBP triples in the sentence.
+    /// </summary>
+    /// <exception cref="Exceptions.MissingModelException">Thrown when library cannot find model files: PosTagger, Ner, Kbp, Parser, DeterministicCoref, Coref</exception>
+    /// <exception cref="Exceptions.UnhandledLibraryException">Thrown when an unexpected exception is caused by CoreNLP library.</exception>
+    [ExceptionConverterAspect]
+    public IReadOnlyList<RelationTriple> Kbp() => _underlyingSentence
+        .kbp()
+        .ToList<edu.stanford.nlp.util.Quadruple, RelationTriple>(x => new RelationTriple(x))
+        .AsReadOnly();
+
+    /// <summary>
     /// Returns the <see cref="SentenceAlgorithms"/> instance for this sentence.
     /// </summary>
     public SentenceAlgorithms Algorithms => new(_underlyingSentence.algorithms());
