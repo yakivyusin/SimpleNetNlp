@@ -122,4 +122,15 @@ public class SentenceAlgorithms : IEquatable<SentenceAlgorithms>
 
     /// <inheritdoc/>
     public override string ToString() => _underlyingSentenceAlgorithms.toString();
+
+    /// <inheritdoc/>
+    public static bool operator ==(SentenceAlgorithms left, SentenceAlgorithms right) => (left, right) switch
+    {
+        (null, null) => true,
+        (null, _) => false,
+        (_, _) => left.Equals(right)
+    };
+
+    /// <inheritdoc/>
+    public static bool operator !=(SentenceAlgorithms left, SentenceAlgorithms right) => !(left == right);
 }

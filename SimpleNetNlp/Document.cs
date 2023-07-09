@@ -78,6 +78,17 @@ public class Document : IEquatable<Document>
     /// <inheritdoc/>
     public override string ToString() => _underlyingDocument.toString();
 
+    /// <inheritdoc/>
+    public static bool operator ==(Document left, Document right) => (left, right) switch
+    {
+        (null, null) => true,
+        (null, _) => false,
+        (_, _) => left.Equals(right)
+    };
+
+    /// <inheritdoc/>
+    public static bool operator !=(Document left, Document right) => !(left == right);
+
     private List<Sentence> LoadSentences() => _underlyingDocument
         .sentences()
         .ToList<edu.stanford.nlp.simple.Sentence, Sentence>(x => new Sentence(x));

@@ -225,6 +225,20 @@ public class Sentence : IEquatable<Sentence>
     /// <inheritdoc/>
     public override int GetHashCode() => _underlyingSentence.hashCode();
 
+    /// <inheritdoc/>
     public static implicit operator edu.stanford.nlp.simple.Sentence(Sentence s) => s._underlyingSentence;
+
+    /// <inheritdoc/>
     public static explicit operator Sentence(edu.stanford.nlp.simple.Sentence s) => new(s);
+
+    /// <inheritdoc/>
+    public static bool operator ==(Sentence left, Sentence right) => (left, right) switch
+    {
+        (null, null) => true,
+        (null, _) => false,
+        (_, _) => left.Equals(right)
+    };
+
+    /// <inheritdoc/>
+    public static bool operator !=(Sentence left, Sentence right) => !(left == right);
 }
