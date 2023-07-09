@@ -23,6 +23,8 @@ internal static class CSharpToJavaExtensions
         range.Start.GetOffset(length),
         range.End.GetOffset(length));
 
+    internal static java.util.Optional NullableToOptional(this object obj) => java.util.Optional.ofNullable(obj);
+
     private class FuncWrapper<T, TReturn> : java.util.function.Function
     {
         private readonly Func<T, TReturn> _func;

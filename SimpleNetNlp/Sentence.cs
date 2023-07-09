@@ -1,5 +1,6 @@
 ﻿using SimpleNetNlp.Exceptions;
 using SimpleNetNlp.Extensions;
+using SimpleNetNlp.Naturalli;
 
 namespace SimpleNetNlp;
 
@@ -206,6 +207,18 @@ public class Sentence : IEquatable<Sentence>
     public IReadOnlyList<RelationTriple> Kbp() => _underlyingSentence
         .kbp()
         .ToList<edu.stanford.nlp.util.Quadruple, RelationTriple>(x => new RelationTriple(x))
+        .AsReadOnly();
+
+    /// <summary>
+    /// Returns a collection of the (possible) natural logic operators on each node of the sentence.
+    /// <para>At each index, the list contains an operator spec if that index is the head word of an operator in the sentence.</para>
+    /// </summary>
+    /// <exception cref="Exceptions.MissingModelException">Thrown when library cannot find model files: PosTagger, Parser</exception>
+    /// <exception cref="Exceptions.UnhandledLibraryException">Thrown when an unexpected exception is caused by CoreNLP library.</exception>
+    [ExceptionConverterAspect]
+    public IReadOnlyCollection<OperatorSpec> Operators() => _underlyingSentence
+        .operators()
+        .ToList<java.util.Optional, OperatorSpec>(x => x.isPresent() ? new(x.get() as edu.stanford.nlp.naturalli.OperatorSpec) : null)
         .AsReadOnly();
 
     /// <summary>

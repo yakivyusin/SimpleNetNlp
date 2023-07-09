@@ -1,4 +1,6 @@
-﻿namespace SimpleNetNlp.Extensions;
+﻿using SimpleNetNlp.Naturalli;
+
+namespace SimpleNetNlp.Extensions;
 
 internal static class JavaToCSharpExtensions
 {
@@ -48,6 +50,20 @@ internal static class JavaToCSharpExtensions
         ArgumentNullException.ThrowIfNull(sentiment);
 
         return Enum.Parse<SentimentClass>(ToCamelCase(sentiment.name()));
+    }
+
+    internal static Monotonicity ToMonotonicity(this edu.stanford.nlp.naturalli.Monotonicity monotonicity)
+    {
+        ArgumentNullException.ThrowIfNull(monotonicity);
+
+        return Enum.Parse<Monotonicity>(ToCamelCase(monotonicity.name()));
+    }
+
+    internal static MonotonicityType ToMonotonicityType(this edu.stanford.nlp.naturalli.MonotonicityType monotonicityType)
+    {
+        ArgumentNullException.ThrowIfNull(monotonicityType);
+
+        return Enum.Parse<MonotonicityType>(ToCamelCase(monotonicityType.name()));
     }
 
     private static string ToCamelCase(string upperUnderscore)
