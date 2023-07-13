@@ -1,4 +1,5 @@
-﻿using SimpleNetNlp.Exceptions;
+﻿using SimpleNetNlp.Coref;
+using SimpleNetNlp.Exceptions;
 using SimpleNetNlp.Extensions;
 
 namespace SimpleNetNlp;
@@ -31,6 +32,18 @@ public class Document : IEquatable<Document>
     /// Get the original (raw) text of this document.
     /// </summary>
     public string OriginalText => _underlyingDocument.text();
+
+    /// <summary>
+    /// Returns the coreference chains in the document. This is a map from coref cluster IDs, to the coref chain with that ID.
+    /// </summary>
+    /// <exception cref="Exceptions.MissingModelException">Thrown when library cannot find model files: PosTagger, Ner, Kbp, Parser, DeterministicCoref, Coref</exception>
+    /// <exception cref="Exceptions.UnhandledLibraryException">Thrown when an unexpected exception is caused by CoreNLP library.</exception>
+    [ExceptionConverterAspect]
+    public IReadOnlyDictionary<int, CorefChain> Coref() => _underlyingDocument
+        .coref()
+        .ToDictionary(
+            (java.lang.Integer x) => x.ToInt(),
+            (edu.stanford.nlp.coref.data.CorefChain x) => new CorefChain(x));
 
     /// <summary>
     /// Returns an indented JSON dump of this document.

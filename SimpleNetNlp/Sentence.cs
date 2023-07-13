@@ -1,4 +1,5 @@
-﻿using SimpleNetNlp.Exceptions;
+﻿using SimpleNetNlp.Coref;
+using SimpleNetNlp.Exceptions;
 using SimpleNetNlp.Extensions;
 using SimpleNetNlp.Naturalli;
 
@@ -220,6 +221,19 @@ public class Sentence : IEquatable<Sentence>
         .operators()
         .ToList<java.util.Optional, OperatorSpec>(x => x.isPresent() ? new(x.get() as edu.stanford.nlp.naturalli.OperatorSpec) : null)
         .AsReadOnly();
+
+    /// <summary>
+    /// Returns the coreference chain for just this sentence.
+    /// <para>Note that this method is actually fairly computationally expensive to call, as it constructs and prunes the coreference data structure for the entire document.</para>
+    /// </summary>
+    /// <exception cref="Exceptions.MissingModelException">Thrown when library cannot find model files: PosTagger, Ner, Kbp, Parser, DeterministicCoref, Coref</exception>
+    /// <exception cref="Exceptions.UnhandledLibraryException">Thrown when an unexpected exception is caused by CoreNLP library.</exception>
+    [ExceptionConverterAspect]
+    public IReadOnlyDictionary<int, CorefChain> Coref() => _underlyingSentence
+        .coref()
+        .ToDictionary(
+            (java.lang.Integer x) => x.ToInt(),
+            (edu.stanford.nlp.coref.data.CorefChain x) => new CorefChain(x));
 
     /// <summary>
     /// Returns the <see cref="SentenceAlgorithms"/> instance for this sentence.

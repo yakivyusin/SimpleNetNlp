@@ -25,6 +25,8 @@ internal static class CSharpToJavaExtensions
 
     internal static java.util.Optional NullableToOptional(this object obj) => java.util.Optional.ofNullable(obj);
 
+    internal static edu.stanford.nlp.util.IntPair ToIntPair(this (int, int) tuple) => new edu.stanford.nlp.util.IntPair(tuple.Item1, tuple.Item2);
+
     private class FuncWrapper<T, TReturn> : java.util.function.Function
     {
         private readonly Func<T, TReturn> _func;
