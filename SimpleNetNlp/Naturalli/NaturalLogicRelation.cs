@@ -154,4 +154,10 @@ public class NaturalLogicRelation : IEquatable<NaturalLogicRelation>
 
     /// <inheritdoc/>
     public static bool operator !=(NaturalLogicRelation left, NaturalLogicRelation right) => !(left == right);
+
+    /// <inheritdoc/>
+    public static implicit operator edu.stanford.nlp.naturalli.NaturalLogicRelation(NaturalLogicRelation r) => r._underlyingRelation;
+
+    /// <inheritdoc/>
+    public static explicit operator NaturalLogicRelation(edu.stanford.nlp.naturalli.NaturalLogicRelation r) => new(r);
 }

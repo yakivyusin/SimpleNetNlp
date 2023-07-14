@@ -217,7 +217,7 @@ public class Sentence : IEquatable<Sentence>
     /// <exception cref="Exceptions.MissingModelException">Thrown when library cannot find model files: PosTagger, Parser</exception>
     /// <exception cref="Exceptions.UnhandledLibraryException">Thrown when an unexpected exception is caused by CoreNLP library.</exception>
     [ExceptionConverterAspect]
-    public IReadOnlyCollection<OperatorSpec> Operators() => _underlyingSentence
+    public IReadOnlyList<OperatorSpec> Operators() => _underlyingSentence
         .operators()
         .ToList<java.util.Optional, OperatorSpec>(x => x.isPresent() ? new(x.get() as edu.stanford.nlp.naturalli.OperatorSpec) : null)
         .AsReadOnly();
@@ -234,6 +234,17 @@ public class Sentence : IEquatable<Sentence>
         .ToDictionary(
             (java.lang.Integer x) => x.ToInt(),
             (edu.stanford.nlp.coref.data.CorefChain x) => new CorefChain(x));
+
+    /// <summary>
+    /// Returns the Natural Logic notion of polarity for each token in a sentence.
+    /// </summary>
+    /// <exception cref="Exceptions.MissingModelException">Thrown when library cannot find model files: PosTagger, Parser</exception>
+    /// <exception cref="Exceptions.UnhandledLibraryException">Thrown when an unexpected exception is caused by CoreNLP library.</exception>
+    [ExceptionConverterAspect]
+    public IReadOnlyList<Polarity> NaturalLogicPolarities() => _underlyingSentence
+        .natlogPolarities()
+        .ToList<edu.stanford.nlp.naturalli.Polarity, Polarity>(x => new(x))
+        .AsReadOnly();
 
     /// <summary>
     /// Returns the <see cref="SentenceAlgorithms"/> instance for this sentence.
