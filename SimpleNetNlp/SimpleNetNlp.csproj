@@ -6,7 +6,7 @@
     <Nullable>disable</Nullable>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
-    <Version>4.5.0.1</Version>
+    <Version>4.5.0.2</Version>
     <Authors>yakivyusin</Authors>
     <Company />
     <Description>Simple C# wrapper for Stanford CoreNLP (see README for details).</Description>
@@ -14,8 +14,9 @@
     <PackageProjectUrl>https://github.com/yakivyusin/SimpleNetNlp</PackageProjectUrl>
     <RepositoryUrl>https://github.com/yakivyusin/SimpleNetNlp</RepositoryUrl>
     <PackageTags>nlp stanford CoreNLP POS NER sentiment governors lemmas</PackageTags>
-    <PackageReleaseNotes>- BREAKING CHANGE: Lemmas, NerTags, PosTags, OpenIe, Governors, IncomingDependencyLabels, and Sentiment are now methods instead of properties.
-- The SentenceAlgorithms API is exposed. Use Sentence.Algorithms to access it.</PackageReleaseNotes>
+    <PackageReleaseNotes>- Added new properties and methods to the Document class: OriginalText, Coref, ToJson, ToXml.
+- Added new properties and methods to the Sentence class: OriginalText, Before, After, Mentions, Kbp, Operators, Coref, NaturalLogicPolarities.
+- Overridden equality operators for all classes.</PackageReleaseNotes>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageReadmeFile>README.md</PackageReadmeFile>
   </PropertyGroup>
