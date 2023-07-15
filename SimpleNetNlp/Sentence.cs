@@ -1,5 +1,7 @@
-﻿using SimpleNetNlp.Exceptions;
+﻿using SimpleNetNlp.Coref;
+using SimpleNetNlp.Exceptions;
 using SimpleNetNlp.Extensions;
+using SimpleNetNlp.Naturalli;
 
 namespace SimpleNetNlp;
 
@@ -25,6 +27,7 @@ public class Sentence : IEquatable<Sentence>
     internal Sentence(edu.stanford.nlp.simple.Sentence underlyingSentence)
     {
         _underlyingSentence = underlyingSentence;
+        _underlyingSentence.Properties().setProperty("ner.useSUTime", "0");
     }
 
     /// <summary>
@@ -75,6 +78,27 @@ public class Sentence : IEquatable<Sentence>
         .AsReadOnly();
 
     /// <summary>
+    /// Get the original (raw) text of this sentence.
+    /// </summary>
+    public string OriginalText => _underlyingSentence.text();
+
+    /// <summary>
+    /// Get the whitespace before each token in the sentence.
+    /// </summary>
+    public IReadOnlyList<string> Before => _underlyingSentence
+        .before()
+        .ToList<string>()
+        .AsReadOnly();
+
+    /// <summary>
+    /// Get the whitespace after each token in the sentence.
+    /// </summary>
+    public IReadOnlyList<string> After => _underlyingSentence
+        .after()
+        .ToList<string>()
+        .AsReadOnly();
+
+    /// <summary>
     /// Returns the lemmas of the sentence, one for each token in the sentence.
     /// </summary>
     /// <exception cref="Exceptions.MissingModelException">Thrown when library cannot find model files: PosTagger</exception>
@@ -91,16 +115,10 @@ public class Sentence : IEquatable<Sentence>
     /// <exception cref="Exceptions.MissingModelException">Thrown when library cannot find model files: PosTagger, Ner</exception>
     /// <exception cref="Exceptions.UnhandledLibraryException">Thrown when an unexpected exception is caused by CoreNLP library.</exception>
     [ExceptionConverterAspect]
-    public IReadOnlyList<string> NerTags()
-    {
-        var props = new java.util.Properties();
-        props.setProperty("ner.useSUTime", "0");
-
-        return _underlyingSentence
-            .nerTags(props)
-            .ToList<string>()
-            .AsReadOnly();
-    }
+    public IReadOnlyList<string> NerTags() => _underlyingSentence
+        .nerTags()
+        .ToList<string>()
+        .AsReadOnly();
 
     /// <summary>
     /// Returns the part of speech tags of the sentence, one for each token in the sentence.
@@ -160,6 +178,75 @@ public class Sentence : IEquatable<Sentence>
         .ToSentimentClass();
 
     /// <summary>
+    /// Returns all mentions of any NER tag, as a list of surface forms.
+    /// </summary>
+    /// <exception cref="Exceptions.MissingModelException">Thrown when library cannot find model files: PosTagger, Ner</exception>
+    /// <exception cref="Exceptions.UnhandledLibraryException">Thrown when an unexpected exception is caused by CoreNLP library.</exception>
+    [ExceptionConverterAspect]
+    public IReadOnlyList<string> Mentions() => _underlyingSentence
+        .mentions()
+        .ToList<string>()
+        .AsReadOnly();
+
+    /// <summary>
+    /// Returns all mentions of the given NER tag, as a list of surface forms.
+    /// </summary>
+    /// <exception cref="Exceptions.MissingModelException">Thrown when library cannot find model files: PosTagger, Ner</exception>
+    /// <exception cref="Exceptions.UnhandledLibraryException">Thrown when an unexpected exception is caused by CoreNLP library.</exception>
+    [ExceptionConverterAspect]
+    public IReadOnlyList<string> Mentions(string nerTag) => _underlyingSentence
+        .mentions(nerTag)
+        .ToList<string>()
+        .AsReadOnly();
+
+    /// <summary>
+    /// Returns a collection of <see cref="RelationTriple"/> objects representing the KBP triples in the sentence.
+    /// </summary>
+    /// <exception cref="Exceptions.MissingModelException">Thrown when library cannot find model files: PosTagger, Ner, Kbp, Parser, DeterministicCoref, Coref</exception>
+    /// <exception cref="Exceptions.UnhandledLibraryException">Thrown when an unexpected exception is caused by CoreNLP library.</exception>
+    [ExceptionConverterAspect]
+    public IReadOnlyList<RelationTriple> Kbp() => _underlyingSentence
+        .kbp()
+        .ToList<edu.stanford.nlp.util.Quadruple, RelationTriple>(x => new RelationTriple(x))
+        .AsReadOnly();
+
+    /// <summary>
+    /// Returns a collection of the (possible) natural logic operators on each node of the sentence.
+    /// <para>At each index, the list contains an operator spec if that index is the head word of an operator in the sentence.</para>
+    /// </summary>
+    /// <exception cref="Exceptions.MissingModelException">Thrown when library cannot find model files: PosTagger, Parser</exception>
+    /// <exception cref="Exceptions.UnhandledLibraryException">Thrown when an unexpected exception is caused by CoreNLP library.</exception>
+    [ExceptionConverterAspect]
+    public IReadOnlyList<OperatorSpec> Operators() => _underlyingSentence
+        .operators()
+        .ToList<java.util.Optional, OperatorSpec>(x => x.isPresent() ? new(x.get() as edu.stanford.nlp.naturalli.OperatorSpec) : null)
+        .AsReadOnly();
+
+    /// <summary>
+    /// Returns the coreference chain for just this sentence.
+    /// <para>Note that this method is actually fairly computationally expensive to call, as it constructs and prunes the coreference data structure for the entire document.</para>
+    /// </summary>
+    /// <exception cref="Exceptions.MissingModelException">Thrown when library cannot find model files: PosTagger, Ner, Kbp, Parser, DeterministicCoref, Coref</exception>
+    /// <exception cref="Exceptions.UnhandledLibraryException">Thrown when an unexpected exception is caused by CoreNLP library.</exception>
+    [ExceptionConverterAspect]
+    public IReadOnlyDictionary<int, CorefChain> Coref() => _underlyingSentence
+        .coref()
+        .ToDictionary(
+            (java.lang.Integer x) => x.ToInt(),
+            (edu.stanford.nlp.coref.data.CorefChain x) => new CorefChain(x));
+
+    /// <summary>
+    /// Returns the Natural Logic notion of polarity for each token in a sentence.
+    /// </summary>
+    /// <exception cref="Exceptions.MissingModelException">Thrown when library cannot find model files: PosTagger, Parser</exception>
+    /// <exception cref="Exceptions.UnhandledLibraryException">Thrown when an unexpected exception is caused by CoreNLP library.</exception>
+    [ExceptionConverterAspect]
+    public IReadOnlyList<Polarity> NaturalLogicPolarities() => _underlyingSentence
+        .natlogPolarities()
+        .ToList<edu.stanford.nlp.naturalli.Polarity, Polarity>(x => new(x))
+        .AsReadOnly();
+
+    /// <summary>
     /// Returns the <see cref="SentenceAlgorithms"/> instance for this sentence.
     /// </summary>
     public SentenceAlgorithms Algorithms => new(_underlyingSentence.algorithms());
@@ -176,6 +263,20 @@ public class Sentence : IEquatable<Sentence>
     /// <inheritdoc/>
     public override int GetHashCode() => _underlyingSentence.hashCode();
 
+    /// <inheritdoc/>
     public static implicit operator edu.stanford.nlp.simple.Sentence(Sentence s) => s._underlyingSentence;
+
+    /// <inheritdoc/>
     public static explicit operator Sentence(edu.stanford.nlp.simple.Sentence s) => new(s);
+
+    /// <inheritdoc/>
+    public static bool operator ==(Sentence left, Sentence right) => (left, right) switch
+    {
+        (null, null) => true,
+        (null, _) => false,
+        (_, _) => left.Equals(right)
+    };
+
+    /// <inheritdoc/>
+    public static bool operator !=(Sentence left, Sentence right) => !(left == right);
 }

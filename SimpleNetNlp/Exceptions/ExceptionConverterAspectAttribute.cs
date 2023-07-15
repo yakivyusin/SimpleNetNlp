@@ -15,6 +15,9 @@ internal class ExceptionConverterAspectAttribute : OnMethodBoundaryAspect
         new MissingNaturalliConverter(),
         new MissingLexParserConverter(),
         new MissingSentimentConverter(),
+        new MissingDeterministicCorefConverter(),
+        new MissingCorefConverter(),
+        new MissingKbpConverter(),
         new DefaultJavaExceptionConverter(),
         new NoOpExceptionConverter()
     };

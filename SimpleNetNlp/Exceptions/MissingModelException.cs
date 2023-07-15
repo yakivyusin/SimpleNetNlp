@@ -5,7 +5,7 @@
 /// </summary>
 public class MissingModelException : Exception
 {
-    public MissingModelException(string message, Exception innerException) : base(message, innerException)
+    internal MissingModelException(string message, Exception innerException) : base(message, innerException)
     {
 
     }

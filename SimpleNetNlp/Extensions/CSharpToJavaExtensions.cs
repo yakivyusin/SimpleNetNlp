@@ -13,9 +13,19 @@ internal static class CSharpToJavaExtensions
 
     internal static java.util.function.Function ToJavaSelector<T>(this Func<Sentence, IEnumerable<T>> func) => new FuncWrapper<edu.stanford.nlp.simple.Sentence, java.util.List>(s => func((Sentence)s).ToJavaList());
 
+    internal static java.util.function.Function ToJavaSelector<T>(this Action<Sentence> action) => new FuncWrapper<edu.stanford.nlp.simple.Sentence, T>(s =>
+    {
+        action((Sentence)s);
+        return default;
+    });
+
     internal static edu.stanford.nlp.ie.machinereading.structure.Span ToJavaSpan(this Range range, int length) => new(
         range.Start.GetOffset(length),
         range.End.GetOffset(length));
+
+    internal static java.util.Optional NullableToOptional(this object obj) => java.util.Optional.ofNullable(obj);
+
+    internal static edu.stanford.nlp.util.IntPair ToIntPair(this (int, int) tuple) => new edu.stanford.nlp.util.IntPair(tuple.Item1, tuple.Item2);
 
     private class FuncWrapper<T, TReturn> : java.util.function.Function
     {
