@@ -1,5 +1,5 @@
 # SimpleNetNlp [![NuGet](https://img.shields.io/nuget/v/SimpleNetNlp.svg)](https://www.nuget.org/packages/SimpleNetNlp/) [![Made in Ukraine](https://img.shields.io/badge/made_in-ukraine-ffd700.svg?labelColor=0057b7)](https://stand-with-ukraine.pp.ua)
-SimpleNetNlp is a simple, C#-way wrapper for [Stanford CoreNLP](https://github.com/stanfordnlp/CoreNLP/).
+SimpleNetNlp is a simple, C#-way wrapper for [Stanford CoreNLP](https://github.com/stanfordnlp/CoreNLP/) that based on [Stanford.NLP.NET](https://github.com/sergey-tihon/Stanford.NLP.NET).
 
 ## Quick Start
 Just install the main SimpleNetNlp package and the model packages you need...
@@ -20,7 +20,7 @@ var pos = sentence.PosTags();
 ## Features
 1. **Simple.** SimpleNetNlp is based on [Simple CoreNLP API](https://stanfordnlp.github.io/CoreNLP/simple.html) that provides a simple API for users who do not need a lot of customization. If you want to start working with NLP as fast and easily as possible, and do not care about the details of the behaviors of the algorithms, this package is perfect for you.
 2. **C#-way.** SimpleNetNlp provides a 100% C# API without Java classes. Use the Force of LINQ and other C# magic, Luke!
-3. **Clean Namespaces.**. IKVM-generated assemblies are delivered as content, so available namespaces in your project aren't littered with Java namespaces. 
+3. **Clean Namespaces.**. IKVM.NET and Stanford.NLP.NET are delivered as content, so available namespaces in your project aren't littered with Java namespaces. 
 4. **Model Packages.** The large 'Stanford CoreNLP Models' Java package is split into [small Nuget packages](https://github.com/yakivyusin/SimpleNetNlp.Models), one per feature. Just install individual models for your task.
 
 ## Versioning
