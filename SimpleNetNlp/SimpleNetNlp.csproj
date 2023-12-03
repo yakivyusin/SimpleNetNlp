@@ -6,7 +6,7 @@
     <Nullable>disable</Nullable>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
-    <Version>4.5.5.0-pre.1</Version>
+    <Version>4.5.0.2</Version>
     <Authors>yakivyusin</Authors>
     <Company />
     <Description>Simple C# wrapper for Stanford CoreNLP (see README for details).</Description>
@@ -14,9 +14,9 @@
     <PackageProjectUrl>https://github.com/yakivyusin/SimpleNetNlp</PackageProjectUrl>
     <RepositoryUrl>https://github.com/yakivyusin/SimpleNetNlp</RepositoryUrl>
     <PackageTags>nlp stanford CoreNLP POS NER sentiment governors lemmas</PackageTags>
-    <PackageReleaseNotes>- Update Stanford CoreNLP to 4.5.5.
-- Drop dependency from Stanford.NLP.NET.
-    </PackageReleaseNotes>
+    <PackageReleaseNotes>- Added new properties and methods to the Document class: OriginalText, Coref, ToJson, ToXml.
+- Added new properties and methods to the Sentence class: OriginalText, Before, After, Mentions, Kbp, Operators, Coref, NaturalLogicPolarities.
+- Overridden equality operators for all classes.</PackageReleaseNotes>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageReadmeFile>README.md</PackageReadmeFile>
   </PropertyGroup>
@@ -30,17 +30,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="IKVM" Version="8.7.1" />
-    <PackageReference Include="IKVM.Maven.Sdk" Version="1.6.1" PrivateAssets="all" />
-    <PackageReference Include="MethodBoundaryAspect.Fody" Version="2.0.149" />
+    <PackageReference Include="MethodBoundaryAspect.Fody" Version="2.0.149-tags-v2-0-149-pre.1" />
+    <PackageReference Include="Stanford.NLP.CoreNLP" Version="4.5.0" PrivateAssets="compile;build;buildTransitive" />
   </ItemGroup>
 
   <ItemGroup>
-    <MavenReference Include="edu.stanford.nlp:stanford-corenlp" Version="4.5.5" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Include="$(OutputPath)\*.dll" Exclude="$(OutputPath)\$(AssemblyName).dll;$(OutputPath)\IKVM.*.dll;$(OutputPath)\MethodBoundaryAspect.dll" Pack="true" PackagePath="lib\$(TargetFramework)" Visible="false" />
+    <None Include="$(OutputPath)\*.dll" Exclude="$(OutputPath)\$(AssemblyName).dll" Pack="true" PackagePath="buildTransitive" Visible="false" />
     <None Include="..\README.md" Pack="true" PackagePath="\" Visible="false" />
   </ItemGroup>
 
