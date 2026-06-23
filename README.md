@@ -1,4 +1,6 @@
 # SimpleNetNlp [![NuGet](https://img.shields.io/nuget/v/SimpleNetNlp.svg)](https://www.nuget.org/packages/SimpleNetNlp/) [![Made in Ukraine](https://img.shields.io/badge/made_in-ukraine-ffd700.svg?labelColor=0057b7)](https://stand-with-ukraine.pp.ua)
+Project is archived and will not receive any functionality updates. You can use it AS IS or consider other SOTA alternatives.
+<hr>
 SimpleNetNlp is a simple, C#-way wrapper for [Stanford CoreNLP](https://github.com/stanfordnlp/CoreNLP/) that based on [Stanford.NLP.NET](https://github.com/sergey-tihon/Stanford.NLP.NET).
 
 ## Quick Start
